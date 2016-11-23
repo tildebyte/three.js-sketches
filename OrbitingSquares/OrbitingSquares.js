@@ -141,12 +141,14 @@ function init() {
 
 function setup() {
 
+    for (let i of lodash.range(100)) {
         rects[i] = new Rect(Blue)
     }
     for (let rect of rects) {
         let objs
         objs = rect.getObjects()
         scene.add(objs[0])
+        scene.add(objs[1])
     }
 }
 

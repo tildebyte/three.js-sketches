@@ -11,7 +11,6 @@ let scene
 let camera
 let renderer
 let rects = []
-// let clock = new THREE.Clock()
 
 class Rect {
 
@@ -23,21 +22,23 @@ class Rect {
         this.orbitAngularSpeed = avoidZero(0.5, 0.01)
         this.objectAngularSpeed = avoidZero(0.1, 0.005)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
+        // Or WireframeGeometry(geo) to render all edges
+        this.outlineGeometry = new THREE.EdgesGeometry(this.planeGeometry)
         this.planeMaterial = new THREE.MeshBasicMaterial({
             'color': this.color,
             'transparent': true,
             'opacity': 0.4
         })
-        this.outlineMaterial = new THREE.MeshBasicMaterial({
+        this.outlineMaterial = new THREE.LineBasicMaterial({
             'color': this.color,
             'transparent': true,
-            'opacity': 0.75
+            'opacity': 0.75,
+            'linewidth': 2
         })
         this.planeMesh = new THREE.Mesh(this.planeGeometry, this.planeMaterial)
-        this.outlineMesh = new THREE.Mesh(this.planeGeometry, this.outlineMaterial)
+        this.outlineMesh = new THREE.LineSegments(this.outlineGeometry, this.outlineMaterial)
         this.planeMesh.position.copy(this.position)
         this.outlineMesh.position.copy(this.planeMesh.position)
-        this.outlineMesh.scale.multiplyScalar(1.05)
         this.planeMesh.rotation.copy(this.rotation)
         this.outlineMesh.rotation.copy(this.planeMesh.rotation)
     }

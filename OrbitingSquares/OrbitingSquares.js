@@ -48,14 +48,12 @@ class Rect {
     }
 
     orbit() {
-        // this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
-        // let x = this.planeMesh.position.x
-        // let y = this.planeMesh.position.y
-        // theta = this.orbitAngularSpeed
-        // this.planeMesh.position.x = x * Math.cos(theta) + y * Math.sin(theta)
-        // this.planeMesh.position.y = y * Math.cos(theta) - x * Math.sin(theta)
-        // // this.planeMesh.position = position
-        // this.outlineMesh.position.copy(this.planeMesh.position)
+        let x = this.planeMesh.position.x
+        let y = this.planeMesh.position.y
+        let theta = this.orbitAngularSpeed
+        this.planeMesh.position.x = x * Math.cos(theta) + y * Math.sin(theta)
+        this.planeMesh.position.y = y * Math.cos(theta) - x * Math.sin(theta)
+        this.outlineMesh.position.copy(this.planeMesh.position)
     }
 
     rotate() {

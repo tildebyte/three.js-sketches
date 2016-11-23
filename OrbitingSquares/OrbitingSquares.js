@@ -16,14 +16,15 @@ let rects = []
 class Rect {
 
     constructor(color) {
-        this.size = Math.round(lodash.random(Width / 16, Width / 25))
         this.position = Rect.positionOnOrbit()
         this.color = color
+        this.size = toInt(lodash.random(Width / 16, Width / 25, 'float'))
         this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
         this.orbitAngularSpeed = avoidZero(0.5, 0.01)
         this.objectAngularSpeed = avoidZero(4.0, 0.5)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
         this.material = new THREE.MeshBasicMaterial({
+        this.planeMaterial = new THREE.MeshBasicMaterial({
             'color': this.color,
             'transparent': true,
             'opacity': 0.4
@@ -32,9 +33,8 @@ class Rect {
             'color': this.color,
             'transparent': true,
             'opacity': 0.75
-            // 'side': THREE.BackSide
         })
-        this.planeMesh = new THREE.Mesh(this.planeGeometry, this.material)
+        this.planeMesh = new THREE.Mesh(this.planeGeometry, this.planeMaterial)
         this.outlineMesh = new THREE.Mesh(this.planeGeometry, this.outlineMaterial)
         this.planeMesh.position.copy(this.position)
         this.outlineMesh.position.copy(this.planeMesh.position)
@@ -91,12 +91,16 @@ class Rect {
         let angle = lodash.random(TAU)
         // `randint` slightly offsets the position so we don't end up with the
         // visible rects orbiting on *exact* circles.
-        let radius = Rect.chooseOrbit() + lodash.random(Math.round(Width / 23))
+        let radius = Rect.chooseOrbit() + lodash.random(Width / 23)
         let creationX = centerX + Math.cos(angle) * radius
         let creationY = centerY + Math.sin(angle) * radius
         position =  new THREE.Vector3(creationX, creationY, 0)
         return position
     }
+}
+
+function toInt(val) {
+    return Math.round(val)
 }
 
 // Return a value from a given range, which avoids zero, within a given tolerance.
@@ -128,17 +132,15 @@ function init() {
         0.1,  // Near clip
         1000  // Far clip
     )
+    camera.position.set(Width / 2, Height / 2, Width * 1.15)
     renderer.setSize(Width, Height)
-    renderer.setClearColor(0x595E6E, 1)
     renderer.setClearColor(Grey, 1)
     document.body.appendChild(renderer.domElement)
 }
 
 function setup() {
-    camera.position.set(Width / 2, Height / 2, Width * 1.15)
 
     for (let i of lodash.range(25)) {
-        rects[i] = new Rect(0x0001cd)
         rects[i] = new Rect(Blue)
     }
     for (let rect of rects) {

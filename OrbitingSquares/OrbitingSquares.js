@@ -1,8 +1,12 @@
+'use strict';
 window.THREE = THREE
 window.lodash = _
 const TAU = Math.PI * 2
 const Width = window.innerWidth
 const Height = window.innerHeight
+const Grey = hslColor(226, 0.11, 0.39)  // 0x595E6E
+const Blue = hslColor(240, 1.0, 0.4)  // 0x595E6E
+const Green = hslColor(84, 1.0, 0.37)  // 0x595E6E
 let scene
 let camera
 let renderer
@@ -107,6 +111,14 @@ function avoidZero(range, tolerance) {
     return value
 }
 
+function hslColor(h, s, l) {
+    let color
+    h = h / 360  // Map to 0..1
+    color = new THREE.Color(0)
+    color.setHSL(h, s, l)
+    return color
+}
+
 function init() {
     scene = new THREE.Scene()
     renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -118,6 +130,7 @@ function init() {
     )
     renderer.setSize(Width, Height)
     renderer.setClearColor(0x595E6E, 1)
+    renderer.setClearColor(Grey, 1)
     document.body.appendChild(renderer.domElement)
 }
 
@@ -126,6 +139,7 @@ function setup() {
 
     for (let i of lodash.range(25)) {
         rects[i] = new Rect(0x0001cd)
+        rects[i] = new Rect(Blue)
     }
     for (let rect of rects) {
         let objs

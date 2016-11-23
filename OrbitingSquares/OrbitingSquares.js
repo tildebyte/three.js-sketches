@@ -16,14 +16,13 @@ let rects = []
 class Rect {
 
     constructor(color) {
-        this.position = Rect.positionOnOrbit()
         this.color = color
         this.size = toInt(lodash.random(Width / 16, Width / 25, 'float'))
+        this.position = Rect.positionOnOrbit()
         this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
         this.orbitAngularSpeed = avoidZero(0.5, 0.01)
-        this.objectAngularSpeed = avoidZero(4.0, 0.5)
+        this.objectAngularSpeed = avoidZero(0.1, 0.005)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
-        this.material = new THREE.MeshBasicMaterial({
         this.planeMaterial = new THREE.MeshBasicMaterial({
             'color': this.color,
             'transparent': true,
@@ -59,7 +58,9 @@ class Rect {
     }
 
     rotate() {
-        this.planeMesh.rotateZ += this.objectAngularSpeed
+        this.rotation.z += this.objectAngularSpeed
+        this.planeMesh.rotation.z = this.rotation.z
+        this.outlineMesh.rotation.z = this.planeMesh.rotation.z
     }
 
     static chooseOrbit() {
@@ -140,14 +141,12 @@ function init() {
 
 function setup() {
 
-    for (let i of lodash.range(25)) {
         rects[i] = new Rect(Blue)
     }
     for (let rect of rects) {
         let objs
         objs = rect.getObjects()
         scene.add(objs[0])
-        // scene.add(objs[1])
     }
 }
 
@@ -163,8 +162,7 @@ setup()
 
 let animate = function() {
     requestAnimationFrame(animate)
-    // update()
-    rects[0].rotation.z += 0.1
+    update()
     renderer.render(scene, camera)
 }
 

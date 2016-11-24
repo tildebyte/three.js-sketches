@@ -1,4 +1,7 @@
 'use strict';
+let THREE
+let _
+let lodash
 window.THREE = THREE
 window.lodash = _
 const TAU = Math.PI * 2
@@ -125,7 +128,7 @@ function hslColor(h, s, l) {
 
 function init() {
     scene = new THREE.Scene()
-    renderer = new THREE.WebGLRenderer({ antialias: true })
+    renderer = new THREE.WebGLRenderer({'antialias': true})
     camera = new THREE.PerspectiveCamera(
         50,  // F.O.V
         Width / Height,  // Aspect

@@ -1,7 +1,7 @@
 'use strict';
-let THREE
-let _
-let lodash
+// let THREE
+// let lodash
+// let _
 window.THREE = THREE
 window.lodash = _
 const TAU = Math.PI * 2
@@ -19,10 +19,10 @@ class Rect {
 
     constructor(color) {
         this.color = color
-        this.size = toInt(lodash.random(Width / 16, Width / 25, 'float'))
+        this.size = toInt(lodash.random(Width / 60, Width / 132, 'float'))
         this.position = Rect.positionOnOrbit()
         this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
-        this.orbitAngularSpeed = avoidZero(0.5, 0.01)
+        this.orbitAngularSpeed = avoidZero(0.015, 0.001)
         this.objectAngularSpeed = avoidZero(0.1, 0.005)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
         // Or WireframeGeometry(geo) to render all edges
@@ -39,7 +39,8 @@ class Rect {
             'linewidth': 2
         })
         this.planeMesh = new THREE.Mesh(this.planeGeometry, this.planeMaterial)
-        this.outlineMesh = new THREE.LineSegments(this.outlineGeometry, this.outlineMaterial)
+        this.outlineMesh = new THREE.LineSegments(this.outlineGeometry,
+                                                  this.outlineMaterial)
         this.planeMesh.position.copy(this.position)
         this.outlineMesh.position.copy(this.planeMesh.position)
         this.planeMesh.rotation.copy(this.rotation)
@@ -71,32 +72,30 @@ class Rect {
         let orbit
         let chance = Math.random()
         if (chance < 0.18) {
-            orbit = Width / 8
+            orbit = Width / 40
         }
         else if (chance < 0.50) {
-            orbit = Width / 4
+            orbit = Width / 19
         }
         else if (chance < 0.78) {
-            orbit = Width / 2.46
+            orbit = Width / 10
         }
         else if (chance < 1.0) {
-            orbit = Width / 1.7777
+            orbit = Width / 7
         }
         return orbit
     }
 
     static positionOnOrbit() {
-        let centerX = Width / 2
-        let centerY = Height / 2
         let position
         // Generate a random position on the circumference of the orbit chosen for
         // this item.
         let angle = lodash.random(TAU)
         // `randint` slightly offsets the position so we don't end up with the
         // visible rects orbiting on *exact* circles.
-        let radius = Rect.chooseOrbit() + lodash.random(Width / 23)
-        let creationX = centerX + Math.cos(angle) * radius
-        let creationY = centerY + Math.sin(angle) * radius
+        let radius = Rect.chooseOrbit() + lodash.random(Width / 64)
+        let creationX = Math.cos(angle) * radius
+        let creationY = Math.sin(angle) * radius
         position =  new THREE.Vector3(creationX, creationY, 0)
         return position
     }
@@ -133,16 +132,15 @@ function init() {
         50,  // F.O.V
         Width / Height,  // Aspect
         0.1,  // Near clip
-        1000  // Far clip
+        10000  // Far clip
     )
-    camera.position.set(Width / 2, Height / 2, Width * 1.15)
+    camera.position.z = 150
     renderer.setSize(Width, Height)
     renderer.setClearColor(Grey, 1)
     document.body.appendChild(renderer.domElement)
 }
 
 function setup() {
-
     for (let i of lodash.range(100)) {
         rects[i] = new Rect(Blue)
     }
@@ -157,7 +155,7 @@ function setup() {
 function update() {
     for (let rect of rects) {
         rect.rotate()
-        // rect.orbit()
+        rect.orbit()
     }
 }
 

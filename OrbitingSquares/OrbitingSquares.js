@@ -48,13 +48,14 @@ class Rect {
         this.outlineMesh = new THREE.LineSegments(this.outlineGeometry,
                                                   this.outlineMaterial)
         this.planeMesh.position.copy(this.position)
-        this.outlineMesh.position.copy(this.planeMesh.position)
+        // this.outlineMesh.position.copy(this.planeMesh.position)
         this.planeMesh.rotation.copy(this.rotation)
-        this.outlineMesh.rotation.copy(this.planeMesh.rotation)
+        this.planeMesh.add(this.outlineMesh)
+        // this.outlineMesh.rotation.copy(this.planeMesh.rotation)
     }
 
-    getObjects() {
-        return [this.planeMesh, this.outlineMesh]
+    getMeshObjects() {
+        return this.planeMesh
     }
 
     orbit() {
@@ -63,13 +64,13 @@ class Rect {
             theta = this.orbitAngularSpeed
         this.planeMesh.position.x = x * Math.cos(theta) + y * Math.sin(theta)
         this.planeMesh.position.y = y * Math.cos(theta) - x * Math.sin(theta)
-        this.outlineMesh.position.copy(this.planeMesh.position)
+        // this.outlineMesh.position.copy(this.planeMesh.position)
     }
 
     rotate() {
         this.rotation.z += this.objectAngularSpeed
         this.planeMesh.rotation.z = this.rotation.z
-        this.outlineMesh.rotation.z = this.planeMesh.rotation.z
+        // this.outlineMesh.rotation.z = this.planeMesh.rotation.z
     }
 
     static chooseOrbit() {
@@ -123,14 +124,13 @@ function init() {
 }
 
 function setup() {
-    for (let i of lodash.range(100)) {
-        rects[i] = new Rect(Blue)
+    for (let _ of lodash.range(100)) {
+        rects[_] = new Rect(Blue)
     }
     for (let rect of rects) {
         let objs
-        objs = rect.getObjects()
-        scene.add(objs[0])
-        scene.add(objs[1])
+        objs = rect.getMeshObjects()
+        scene.add(objs)
     }
 }
 

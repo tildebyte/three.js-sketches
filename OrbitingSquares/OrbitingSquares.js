@@ -1,7 +1,13 @@
-'use strict';
-// let THREE
-// let lodash
-// let _
+'use strict'
+
+// Debug
+let THREE,
+    lodash,
+    _,
+    hslColor,
+    toInt,
+    avoidZero
+
 window.THREE = THREE
 window.lodash = _
 const TAU = Math.PI * 2,
@@ -19,7 +25,7 @@ class Rect {
 
     constructor(color) {
         this.color = color
-        this.size = toInt(lodash.random(Width / 60, Width / 132, 'float'))
+        this.size = toInt(lodash.random(Width / 80, Width / 132, 'float'))
         this.position = Rect.positionOnOrbit()
         this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
         this.orbitAngularSpeed = avoidZero(0.015, 0.001)

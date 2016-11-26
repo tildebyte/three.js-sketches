@@ -107,9 +107,6 @@ class Rect {
     }
 }
 
-    }
-}
-
 function init() {
     scene = new THREE.Scene()
     renderer = new THREE.WebGLRenderer({'antialias': true})
@@ -137,15 +134,15 @@ function setup() {
     }
 }
 
+init()
+setup()
+
 function update() {
     for (let rect of rects) {
         rect.rotate()
         rect.orbit()
     }
 }
-
-init()
-setup()
 
 function animate() {
     requestAnimationFrame(animate)

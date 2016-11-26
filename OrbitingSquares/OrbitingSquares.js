@@ -1,13 +1,5 @@
 'use strict'
 
-// Debug
-let THREE,
-    lodash,
-    _,
-    hslColor,
-    toInt,
-    avoidZero
-
 window.THREE = THREE
 window.lodash = _
 const TAU = Math.PI * 2,
@@ -23,8 +15,7 @@ let scene,
 
 class Rect {
 
-    constructor(color) {
-        this.color = color
+    constructor() {
         this.size = toInt(lodash.random(Width / 80, Width / 132, 'float'))
         this.position = Rect.positionOnOrbit()
         this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
@@ -34,12 +25,12 @@ class Rect {
         // Or WireframeGeometry(geo) to render all edges
         this.outlineGeometry = new THREE.EdgesGeometry(this.planeGeometry)
         this.planeMaterial = new THREE.MeshBasicMaterial({
-            'color': this.color,
+            'color': 0x000000,
             'transparent': true,
             'opacity': 0.4
         })
         this.outlineMaterial = new THREE.LineBasicMaterial({
-            'color': this.color,
+            'color': 0x000000,
             'transparent': true,
             'opacity': 0.75,
             'linewidth': 2
@@ -48,13 +39,12 @@ class Rect {
         this.outlineMesh = new THREE.LineSegments(this.outlineGeometry,
                                                   this.outlineMaterial)
         this.planeMesh.position.copy(this.position)
-        // this.outlineMesh.position.copy(this.planeMesh.position)
         this.planeMesh.rotation.copy(this.rotation)
         this.planeMesh.add(this.outlineMesh)
-        // this.outlineMesh.rotation.copy(this.planeMesh.rotation)
+        // this.color = this.recolor()
     }
 
-    getMeshObjects() {
+    getMeshObject() {
         return this.planeMesh
     }
 
@@ -64,13 +54,11 @@ class Rect {
             theta = this.orbitAngularSpeed
         this.planeMesh.position.x = x * Math.cos(theta) + y * Math.sin(theta)
         this.planeMesh.position.y = y * Math.cos(theta) - x * Math.sin(theta)
-        // this.outlineMesh.position.copy(this.planeMesh.position)
     }
 
     rotate() {
         this.rotation.z += this.objectAngularSpeed
         this.planeMesh.rotation.z = this.rotation.z
-        // this.outlineMesh.rotation.z = this.planeMesh.rotation.z
     }
 
     static chooseOrbit() {
@@ -106,6 +94,10 @@ class Rect {
         position =  new THREE.Vector3(creationX, creationY, 0)
         return position
     }
+    
+    // recolor(){
+    //
+    // }
 }
 
 function init() {
@@ -125,22 +117,16 @@ function init() {
 
 function setup() {
     for (let _ of lodash.range(100)) {
-        rects[_] = new Rect(Blue)
-    }
-    for (let rect of rects) {
-        let objs
-        objs = rect.getMeshObjects()
-        scene.add(objs)
+        rects[_] = new Rect()
+        scene.add(rects[_].getMeshObject())
     }
 }
-
-init()
-setup()
 
 function update() {
     for (let rect of rects) {
         rect.rotate()
         rect.orbit()
+        // rect.recolor()
     }
 }
 
@@ -151,4 +137,6 @@ function animate() {
 }
 
 window.scene = scene
+init()
+setup()
 animate()

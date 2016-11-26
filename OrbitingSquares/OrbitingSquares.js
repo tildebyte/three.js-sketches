@@ -101,28 +101,7 @@ class Rect {
     }
 }
 
-function toInt(val) {
-    return Math.round(val)
-}
-
-// Return a value from a given range, which avoids zero, within a given tolerance.
-function avoidZero(range, tolerance) {
-    //    Return a random value in the range from `-range` to strictly less than
-    //    `range`, excluding the inner range +/-`tolerance` (and, logically, zero as
-    //    well).
-    let value = lodash.random(-range, range, 'float')
-    while (-tolerance < value && value < tolerance) {
-        value = lodash.random(-range, range, 'float')
     }
-    return value
-}
-
-function hslColor(h, s, l) {
-    let color
-    h = h / 360  // Map to 0..1
-    color = new THREE.Color(0)
-    color.setHSL(h, s, l)
-    return color
 }
 
 function init() {

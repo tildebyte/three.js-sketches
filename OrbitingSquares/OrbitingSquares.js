@@ -4,16 +4,16 @@
 // let _
 window.THREE = THREE
 window.lodash = _
-const TAU = Math.PI * 2
-const Width = window.innerWidth
-const Height = window.innerHeight
-const Grey = hslColor(226, 0.11, 0.39)  // 0x595E6E
-const Blue = hslColor(240, 1.0, 0.4)  // 0x595E6E
-const Green = hslColor(84, 1.0, 0.37)  // 0x595E6E
-let scene
-let camera
-let renderer
-let rects = []
+const TAU = Math.PI * 2,
+    Width = window.innerWidth,
+    Height = window.innerHeight,
+    Grey = hslColor(226, 0.11, 0.39),  // 0x595E6E
+    Blue = hslColor(240, 1.0, 0.4),  // 0x595E6E
+    Green = hslColor(84, 1.0, 0.37)  // 0x595E6E
+let scene,
+    camera,
+    renderer,
+    rects = []
 
 class Rect {
 
@@ -52,9 +52,9 @@ class Rect {
     }
 
     orbit() {
-        let x = this.planeMesh.position.x
-        let y = this.planeMesh.position.y
-        let theta = this.orbitAngularSpeed
+        let x = this.planeMesh.position.x,
+            y = this.planeMesh.position.y,
+            theta = this.orbitAngularSpeed
         this.planeMesh.position.x = x * Math.cos(theta) + y * Math.sin(theta)
         this.planeMesh.position.y = y * Math.cos(theta) - x * Math.sin(theta)
         this.outlineMesh.position.copy(this.planeMesh.position)
@@ -69,8 +69,8 @@ class Rect {
     static chooseOrbit() {
         // Randomly choose an orbit, based on a set of weights.
         // The returns can be adjusted to account for a larger / smaller sketch size.
-        let orbit
-        let chance = Math.random()
+        let chance = Math.random(),
+            orbit
         if (chance < 0.18) {
             orbit = Width / 40
         }
@@ -87,15 +87,15 @@ class Rect {
     }
 
     static positionOnOrbit() {
-        let position
-        // Generate a random position on the circumference of the orbit chosen for
-        // this item.
-        let angle = lodash.random(TAU)
-        // `randint` slightly offsets the position so we don't end up with the
-        // visible rects orbiting on *exact* circles.
-        let radius = Rect.chooseOrbit() + lodash.random(Width / 64)
-        let creationX = Math.cos(angle) * radius
-        let creationY = Math.sin(angle) * radius
+        let position,
+            // Generate a random position on the circumference of the orbit chosen for
+            // this item.
+            angle = lodash.random(TAU),
+            // Slightly offsets the position so we don't end up with the
+            // visible rects orbiting on *exact* circles.
+            radius = Rect.chooseOrbit() + lodash.random(Width / 64),
+            creationX = Math.cos(angle) * radius,
+            creationY = Math.sin(angle) * radius
         position =  new THREE.Vector3(creationX, creationY, 0)
         return position
     }
@@ -162,7 +162,7 @@ function update() {
 init()
 setup()
 
-let animate = function() {
+function animate() {
     requestAnimationFrame(animate)
     update()
     renderer.render(scene, camera)

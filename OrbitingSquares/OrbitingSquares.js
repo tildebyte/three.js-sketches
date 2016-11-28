@@ -9,7 +9,7 @@
 // 8. All squares rotating at a randomly-selected speed and direction around
 //    a common center point
 //
-// Initial implementation by Ben Alkov 23-27 November 2016
+// Initial implementation by Ben Alkov 20-27 November 2016
 
 'use strict'
 
@@ -85,12 +85,16 @@ class Rect {
 
     recolor() {
         if (Math.floor(this.angle) % 2) {
-            this.planeMaterial.color.lerp(Blue, this.angle % 1 + lodash.random(0.05, 0.1))
-            this.outlineMaterial.color.lerp(Blue, this.angle % 1 + lodash.random(0.05, 0.1))
+            this.planeMaterial.color.lerp(Blue,
+                this.angle % 1 + lodash.random(0.05, 0.1))
+            this.outlineMaterial.color.lerp(Blue,
+                this.angle % 1 + lodash.random(0.05, 0.1))
         }
         else {
-            this.planeMaterial.color.lerp(Green, this.angle % 1 + lodash.random(0.05, 0.1))
-            this.outlineMaterial.color.lerp(Green, this.angle % 1 + lodash.random(0.05, 0.1))
+            this.planeMaterial.color.lerp(Green,
+                this.angle % 1 + lodash.random(0.05, 0.1))
+            this.outlineMaterial.color.lerp(Green,
+                this.angle % 1 + lodash.random(0.05, 0.1))
         }
     }
 

@@ -1,3 +1,16 @@
+// 1. One hundred squares
+// 2. Of randomly-selected size
+// 3. Each having semi-tranparent fill and stroke
+// 4. Each colored according to an underlying algorithm
+// 5. Each rotating around its own center with a randomly-selected speed and
+//    direction
+// 6. Randomly distributed around the circumference of
+// 7. One of several concentric circles
+// 8. All squares rotating at a randomly-selected speed and direction around
+//    a common center point
+//
+// Initial implementation by Ben Alkov 23-27 November 2016
+
 'use strict'
 
 window.THREE = THREE
@@ -5,9 +18,9 @@ window.lodash = _
 const TAU = Math.PI * 2,
     Width = window.innerWidth,
     Height = window.innerHeight,
-    Grey = hslColor(226, 0.11, 0.39),  // 0x595E6E
-    Blue = hslColor(240, 1.0, 0.4),  // 0x595E6E
-    Green = hslColor(84, 1.0, 0.37)  // 0x595E6E
+    Grey = hlsColor(226, 0.39, 0.11),  // 0x585d6e
+    Blue = hlsColor(240, 0.40, 1.0),  // 0x0000cc
+    Green = hlsColor(84, 0.33, 0.8)  // 0x71bc00
 let scene,
     camera,
     renderer,
@@ -18,9 +31,12 @@ class Rect {
     constructor() {
         this.size = toInt(lodash.random(Width / 80, Width / 132, 'float'))
         this.position = Rect.positionOnOrbit()
+        this.angle = this.getAngle()
         this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
-        this.orbitAngularSpeed = avoidZero(0.015, 0.001)
-        this.objectAngularSpeed = avoidZero(0.1, 0.005)
+        // ~0.5 to ~0.1 degree
+        this.orbitAngularSpeed = avoidZero(8.727e-3, 1.745e-3)
+        // ~3 to ~0.3 degree
+        this.objectAngularSpeed = avoidZero(5.236e-2, 5.236e-3)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
         // Or WireframeGeometry(geo) to render all edges
         this.outlineGeometry = new THREE.EdgesGeometry(this.planeGeometry)
@@ -48,12 +64,20 @@ class Rect {
         return this.planeMesh
     }
 
+    getAngle() {
+        let position
+        position = new THREE.Vector2(this.position.x, this.position.y)
+        return position.angle()
+    }
+
     orbit() {
-        let x = this.planeMesh.position.x,
-            y = this.planeMesh.position.y,
+        let x = this.position.x,
+            y = this.position.y,
             theta = this.orbitAngularSpeed
-        this.planeMesh.position.x = x * Math.cos(theta) + y * Math.sin(theta)
-        this.planeMesh.position.y = y * Math.cos(theta) - x * Math.sin(theta)
+        this.position.x = x * Math.cos(theta) + y * Math.sin(theta)
+        this.position.y = y * Math.cos(theta) - x * Math.sin(theta)
+        this.planeMesh.position.copy(this.position)
+        this.angle = this.getAngle()
     }
 
     rotate() {
@@ -67,16 +91,16 @@ class Rect {
         let chance = Math.random(),
             orbit
         if (chance < 0.18) {
-            orbit = Width / 40
+            orbit = Width / 41
         }
         else if (chance < 0.50) {
-            orbit = Width / 19
+            orbit = Width / 17
         }
         else if (chance < 0.78) {
-            orbit = Width / 10
+            orbit = Width / 12
         }
         else if (chance < 1.0) {
-            orbit = Width / 7
+            orbit = Width / 9
         }
         return orbit
     }

@@ -41,12 +41,10 @@ class Rect {
         // Or WireframeGeometry(geo) to render all edges
         this.outlineGeometry = new THREE.EdgesGeometry(this.planeGeometry)
         this.planeMaterial = new THREE.MeshBasicMaterial({
-            'color': 0x000000,
             'transparent': true,
             'opacity': 0.4
         })
         this.outlineMaterial = new THREE.LineBasicMaterial({
-            'color': 0x000000,
             'transparent': true,
             'opacity': 0.75,
             'linewidth': 2
@@ -57,7 +55,7 @@ class Rect {
         this.planeMesh.position.copy(this.position)
         this.planeMesh.rotation.copy(this.rotation)
         this.planeMesh.add(this.outlineMesh)
-        // this.color = this.recolor()
+        this.recolor()
     }
 
     getMeshObject() {
@@ -83,6 +81,17 @@ class Rect {
     rotate() {
         this.rotation.z += this.objectAngularSpeed
         this.planeMesh.rotation.z = this.rotation.z
+    }
+
+    recolor() {
+        if (Math.floor(this.angle) % 2) {
+            this.planeMaterial.color.lerp(Blue, this.angle % 1 + lodash.random(0.05, 0.1))
+            this.outlineMaterial.color.lerp(Blue, this.angle % 1 + lodash.random(0.05, 0.1))
+        }
+        else {
+            this.planeMaterial.color.lerp(Green, this.angle % 1 + lodash.random(0.05, 0.1))
+            this.outlineMaterial.color.lerp(Green, this.angle % 1 + lodash.random(0.05, 0.1))
+        }
     }
 
     static chooseOrbit() {
@@ -118,10 +127,6 @@ class Rect {
         position =  new THREE.Vector3(creationX, creationY, 0)
         return position
     }
-    
-    // recolor(){
-    //
-    // }
 }
 
 function init() {
@@ -150,7 +155,7 @@ function update() {
     for (let rect of rects) {
         rect.rotate()
         rect.orbit()
-        // rect.recolor()
+        rect.recolor()
     }
 }
 

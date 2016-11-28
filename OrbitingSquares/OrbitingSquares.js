@@ -20,7 +20,7 @@ const TAU = Math.PI * 2,
     Height = window.innerHeight,
     Grey = hlsColor(226, 0.39, 0.11),  // 0x585d6e
     Blue = hlsColor(240, 0.40, 0.8),  // 0x0000cc
-    Green = hlsColor(84, 0.33, 0.8)  // 0x71bc00
+    Green = hlsColor(84, 0.33, 0.7)  // 0x71bc00
 let scene,
     camera,
     renderer,

@@ -19,7 +19,7 @@ const TAU = Math.PI * 2,
     Width = window.innerWidth,
     Height = window.innerHeight,
     Grey = hlsColor(226, 0.39, 0.11),  // 0x585d6e
-    Blue = hlsColor(240, 0.40, 1.0),  // 0x0000cc
+    Blue = hlsColor(240, 0.40, 0.8),  // 0x0000cc
     Green = hlsColor(84, 0.33, 0.8)  // 0x71bc00
 let scene,
     camera,
@@ -33,20 +33,20 @@ class Rect {
         this.position = Rect.positionOnOrbit()
         this.angle = this.getAngle()
         this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
-        // ~0.5 to ~0.1 degree
-        this.orbitAngularSpeed = avoidZero(8.727e-3, 1.745e-3)
-        // ~3 to ~0.3 degree
-        this.objectAngularSpeed = avoidZero(5.236e-2, 5.236e-3)
+        // ~0.2 to ~0.1 degree
+        this.orbitAngularSpeed = avoidZero(3.49e-3, 1.745e-3)
+        // ~1.5 to ~0.3 degree
+        this.objectAngularSpeed = avoidZero(2.618e-2, 5.236e-3)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
         // Or WireframeGeometry(geo) to render all edges
         this.outlineGeometry = new THREE.EdgesGeometry(this.planeGeometry)
         this.planeMaterial = new THREE.MeshBasicMaterial({
             'transparent': true,
-            'opacity': 0.4
+            'opacity': 0.35
         })
         this.outlineMaterial = new THREE.LineBasicMaterial({
             'transparent': true,
-            'opacity': 0.75,
+            'opacity': 0.65,
             'linewidth': 2
         })
         this.planeMesh = new THREE.Mesh(this.planeGeometry, this.planeMaterial)

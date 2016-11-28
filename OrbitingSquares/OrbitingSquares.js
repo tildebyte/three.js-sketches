@@ -133,6 +133,12 @@ class Rect {
     }
 }
 
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+}
+
 function init() {
     scene = new THREE.Scene()
     renderer = new THREE.WebGLRenderer({'antialias': true})
@@ -144,8 +150,9 @@ function init() {
     )
     camera.position.z = 150
     renderer.setSize(Width, Height)
-    renderer.setClearColor(Grey, 1)
+    renderer.setClearColor(Grey, 1.0)
     document.body.appendChild(renderer.domElement)
+    window.addEventListener('resize', onWindowResize, false)
 }
 
 function setup() {

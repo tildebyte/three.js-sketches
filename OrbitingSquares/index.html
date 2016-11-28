@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)http://s.codepen.io/tildebyte/debug/gLgdgo -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="shortcut icon" type="image/x-icon" href="https://production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico">
+        <link rel="mask-icon" type="" href="https://production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111">
+        <title>CodePen - OrbitingRects three.js #codevember</title>
+    </head>
+    <body translate="no">
+        <title>OrbitingSquares</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                margin: 0px;
+                background-color: #000000;
+                overflow: hidden;
+            }
+        </style>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r82/three.js"></script>
+
+        <script>
+            function hlsColor(h, l, s) {
+                let color
+                h = h / 360 // Map to 0..1
+                color = new THREE.Color(0)
+                color.setHSL(h, s, l)
+                return color
+            }
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
+
+        <script>
+            window.lodash = _
+
+            function scale(val, sourceMin, sourceMax, destMin, destMax) {
+                return (val - sourceMin) / (sourceMax - sourceMin) * (destMax - destMin) + destMin
+            }
+
+            // Return a value from a given range, which avoids zero, within a given tolerance.
+            function avoidZero(range, tolerance) {
+                //    Return a random value in the range from `-range` to strictly less than
+                //    `range`, excluding the inner range +/-`tolerance` (and, logically, zero as
+                //    well).
+                let value = lodash.random(-range, range, 'float')
+                while (-tolerance < value && value < tolerance) {
+                    value = lodash.random(-range, range, 'float')
+                }
+                return value
+            }
+
+            function toInt(val) {
+                return Math.round(val)
+            }
+        </script>
+
+        <script src="./OrbitingSquares.js"></script>
+
+        <canvas width="1511" height="807" style="width: 1511px; height: 807px;"></canvas>
+    </body>
+</html>

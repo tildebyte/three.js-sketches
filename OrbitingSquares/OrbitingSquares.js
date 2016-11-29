@@ -24,6 +24,12 @@ let scene,
     renderer,
     rects = []
 
+let requestAnimationFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            window.msRequestAnimationFrame
+window.requestAnimationFrame = requestAnimationFrame
+
 class Rect {
 
     constructor() {

@@ -18,7 +18,23 @@ const TAU = Math.PI * 2,
     Height = window.innerHeight,
     Grey = hlsColor(226, 0.39, 0.11),  // 0x585d6e
     Blue = hlsColor(240, 0.40, 0.8),  // 0x0000cc
-    Green = hlsColor(84, 0.33, 0.7)  // 0x71bc00
+    Green = hlsColor(84, 0.33, 0.7),  // 0x71bc00
+    // (val, min, max) Clamps the value to be between min and max.
+    clamp = THREE.Math.clamp,
+    // ( x, a1, a2, b1, b2 ) Linear mapping of x from range [a1, a2] to range [b1, b2]
+    map = THREE.Math.mapLinear,
+    degToRad = THREE.Math.degToRad,
+    radToDeg = THREE.Math.radToDeg,
+    mapLinear = THREE.Math.mapLinear,
+    // Random float from 0 to 1 with 16 bits of randomness.
+    random = THREE.Math.random16,
+    // (low, high) Random integer from low to high interval.
+    randInt = THREE.Math.randInt,
+    // (low, high) Random float from low to high interval.
+    randFloat = THREE.Math.randFloat,
+    // (range) Random float from -range / 2 to range / 2 interval.
+    randFloatSpread = THREE.Math.randFloatSpread
+
 let scene,
     camera,
     renderer,
@@ -33,10 +49,10 @@ window.requestAnimationFrame = requestAnimationFrame
 class Rect {
 
     constructor() {
-        this.size = toInt(lodash.random(Width / 80, Width / 132, 'float'))
+        this.size = toInt(randFloat(Width / 80, Width / 132, 'float'))
         this.position = Rect.positionOnOrbit()
         this.angle = this.getAngle()
-        this.rotation = new THREE.Euler(0, 0, lodash.random(TAU))
+        this.rotation = new THREE.Euler(0, 0, randFloat(0, TAU))
         // ~0.2 to ~0.1 degree
         this.orbitAngularSpeed = avoidZero(3.49e-3, 1.745e-3)
         // ~1.5 to ~0.3 degree
@@ -126,10 +142,10 @@ class Rect {
         let position,
             // Generate a random position on the circumference of the orbit chosen for
             // this item.
-            angle = lodash.random(TAU),
+            angle = randFloat(0, TAU),
             // Slightly offsets the position so we don't end up with the
             // visible rects orbiting on *exact* circles.
-            radius = Rect.chooseOrbit() + lodash.random(Width / 64),
+            radius = Rect.chooseOrbit() + randFloat(0, Width / 64),
             creationX = Math.cos(angle) * radius,
             creationY = Math.sin(angle) * radius
         position =  new THREE.Vector3(creationX, creationY, 0)

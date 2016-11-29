@@ -13,8 +13,6 @@
 
 'use strict'
 
-window.THREE = THREE
-window.lodash = _
 const TAU = Math.PI * 2,
     Width = window.innerWidth,
     Height = window.innerHeight,
@@ -133,15 +131,33 @@ class Rect {
     }
 }
 
+
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
     renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
+function isWebglAvailable() {
+    // e.g.
+    // renderer = isWebglAvailable() ?
+    //            new THREE.WebGLRenderer({'antialias': true}) :
+    //            console.log('Sorry! WebGL required')
+    try {
+        let canvas = document.createElement('canvas')
+        return !!window.WebGLRenderingContext &&
+            canvas.getContext('webgl')
+    }
+    catch (e) {
+        return false
+    }
+}
+
 function init() {
     scene = new THREE.Scene()
-    renderer = new THREE.WebGLRenderer({'antialias': true})
+    renderer = isWebglAvailable() ?
+               new THREE.WebGLRenderer({'antialias': true}) :
+               console.log('Sorry! WebGL required')
     camera = new THREE.PerspectiveCamera(
         50,  // F.O.V
         Width / Height,  // Aspect
@@ -154,6 +170,7 @@ function init() {
     document.body.appendChild(renderer.domElement)
     window.addEventListener('resize', onWindowResize, false)
 }
+
 
 function setup() {
     for (let _ of lodash.range(100)) {
@@ -176,7 +193,7 @@ function animate() {
     renderer.render(scene, camera)
 }
 
-window.scene = scene
+
 init()
 setup()
 animate()

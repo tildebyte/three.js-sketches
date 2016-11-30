@@ -9,7 +9,7 @@
 // 8. All squares rotating at a randomly-selected speed and direction around
 //    a common center point
 //
-// Initial implementation by Ben Alkov 20-27 November 2016
+// Initial implementation by Ben Alkov 20-27 November 2016.
 
 'use strict'
 
@@ -19,7 +19,7 @@ const TAU = Math.PI * 2,
     Grey = new THREE.Color(0x46474C),  // 0x585d6e
     Blue = new THREE.Color(0x2525C4),  // 0x0000cc
     Green = new THREE.Color(0x7DB528),  // 0x71bc00
-    // ( x, a1, a2, b1, b2 ) Linear mapping of x from range [a1, a2] to range [b1, b2]
+    // ( x, a1, a2, b1, b2 ) - Linear mapping of x from range [a1, a2] to range [b1, b2].
     map = THREE.Math.mapLinear,
     degToRad = THREE.Math.degToRad,
     radToDeg = THREE.Math.radToDeg,
@@ -45,12 +45,12 @@ class Rect {
         this.position = Rect.positionOnOrbit()
         this.angle = this.getAngle()
         this.rotation = new THREE.Euler(0, 0, randFloat(0, TAU))
-        // ~0.2 to ~0.1 degree
+        // ~0.2 to ~0.1 degree.
         this.orbitAngularSpeed = avoidZero(3.49e-3, 1.745e-3)
-        // ~1.5 to ~0.3 degree
+        // ~1.5 to ~0.3 degree.
         this.objectAngularSpeed = avoidZero(2.618e-2, 5.236e-3)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
-        // Or WireframeGeometry(geo) to render all edges
+        // Or WireframeGeometry(geo) to render all edges.
         this.outlineGeometry = new THREE.EdgesGeometry(this.planeGeometry)
         this.planeMaterial = new THREE.MeshBasicMaterial({
             'transparent': true,
@@ -194,10 +194,10 @@ function init() {
                new THREE.WebGLRenderer({'antialias': true}) :
                console.log('Sorry! WebGL required')
     camera = new THREE.PerspectiveCamera(
-        50,  // F.O.V
-        Width / Height,  // Aspect
-        0.1,  // Near clip
-        10000  // Far clip
+        50,  // F.O.V.
+        Width / Height,  // Aspect.
+        0.1,  // Near clip.
+        10000  // Far clip.
     )
     camera.position.z = 150
     renderer.setSize(Width, Height)

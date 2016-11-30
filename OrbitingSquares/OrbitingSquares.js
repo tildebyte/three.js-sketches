@@ -103,35 +103,42 @@ class Rect {
         let color,
             otherColor,
             shade
-        if (degToRad(0) <= this.angle && this.angle <= degToRad(180)) {
-            if (degToRad(0) <= this.angle && this.angle <= degToRad(90)) {
-                shade = map(radToDeg(this.angle), 90, 0, 0, 0.5)
+        // Left half.
+        if (degToRad(90) <= this.angle && this.angle <= degToRad(270)) {
+            // 2nd quad.
+            if (degToRad(90) <= this.angle && this.angle <= degToRad(180)) {
+                shade = map(radToDeg(this.angle), 180, 90, 0, 0.5)
             }
-            else if (degToRad(90) < this.angle && this.angle <= degToRad(180)) {
-                shade = map(radToDeg(this.angle), 90, 180, 0, 0.5)
+            // 3rd quad.
+            else if (degToRad(180) < this.angle && this.angle <= degToRad(270)) {
+                shade = map(radToDeg(this.angle), 180, 270, 0, 0.5)
             }
             color = new THREE.Color(Green)
             otherColor = new THREE.Color(Blue)
         }
+        // Right half.
         else {
-            if (degToRad(180) < this.angle && this.angle < degToRad(270)) {
-                shade = map(radToDeg(this.angle), 270, 180, 0, 0.5)
+            // 1st quad.
+            if (degToRad(0) <= this.angle && this.angle < degToRad(90)) {
+                shade = map(radToDeg(this.angle), 0, 89.99, 0, 0.5)
             }
-            else if (degToRad(270) <= this.angle && this.angle <= degToRad(360)) {
-                shade = map(radToDeg(this.angle), 270, 360, 0, 0.5)
+            // 4th quad.
+            else if (degToRad(270) < this.angle && this.angle <= degToRad(360)) {
+                shade = map(radToDeg(this.angle), 360, 269.99, 0, 0.5)
             }
             color = new THREE.Color(Blue)
             otherColor = new THREE.Color(Green)
         }
 
         this.planeMaterial.color = color
-        this.planeMaterial.color.lerp(new THREE.Color(otherColor), shade)
+        this.planeMaterial.color.lerp(new THREE.Color(otherColor),
+                                      shade + randFloat(-0.02, 0.02))
         this.outlineMaterial.color = this.planeMaterial.color
     }
 
     static chooseOrbit() {
         // Randomly choose an orbit, based on a set of weights.
-        // The returns can be adjusted to account for a larger / smaller sketch size.
+        // Tweak the orbits by adjusting the divisors.
         let chance = Math.random(),
             orbit
         if (chance < 0.18) {

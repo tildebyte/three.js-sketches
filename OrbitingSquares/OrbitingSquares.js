@@ -16,11 +16,9 @@
 const TAU = Math.PI * 2,
     Width = window.innerWidth,
     Height = window.innerHeight,
-    Grey = new THREE.Color(0x585d6e),  // 0x585d6e
-    Blue = new THREE.Color(0x0000cc),  // 0x0000cc
-    Green = new THREE.Color(0x71bc00),  // 0x71bc00
-    // (val, min, max) Clamps the value to be between min and max.
-    clamp = THREE.Math.clamp,
+    Grey = new THREE.Color(0x46474C),  // 0x585d6e
+    Blue = new THREE.Color(0x2525C4),  // 0x0000cc
+    Green = new THREE.Color(0x7DB528),  // 0x71bc00
     // ( x, a1, a2, b1, b2 ) Linear mapping of x from range [a1, a2] to range [b1, b2]
     map = THREE.Math.mapLinear,
     degToRad = THREE.Math.degToRad,
@@ -28,9 +26,7 @@ const TAU = Math.PI * 2,
     // (low, high) Random integer from low to high interval.
     randInt = THREE.Math.randInt,
     // (low, high) Random float from low to high interval.
-    randFloat = THREE.Math.randFloat,
-    // (range) Random float from -range / 2 to range / 2 interval.
-    randFloatSpread = THREE.Math.randFloatSpread
+    randFloat = THREE.Math.randFloat
 
 let scene,
     camera,
@@ -44,8 +40,7 @@ let requestAnimationFrame = window.requestAnimationFrame ||
 window.requestAnimationFrame = requestAnimationFrame
 
 class Rect {
-
-    constructor(ident) {
+    constructor() {
         this.size = Math.floor(randFloat(Width / 80, Width / 132))
         this.position = Rect.positionOnOrbit()
         this.angle = this.getAngle()
@@ -101,18 +96,37 @@ class Rect {
     }
 
     recolor() {
-        if (Math.floor(this.angle) % 2) {
-            this.planeMaterial.color.lerp(Blue,
-                this.angle % 1 + lodash.random(0.05, 0.1))
-            this.outlineMaterial.color.lerp(Blue,
-                this.angle % 1 + lodash.random(0.05, 0.1))
+        // This looks weird because, AFAICT, lerping with a var of type `Color`
+        //     **overwrites** the var with the new `Color` value (as well as
+        //     changing the color being lerped, as expected). I'm working around
+        //     this by always creating entirely new `Color` vars each time.
+        let color,
+            otherColor,
+            shade
+        if (degToRad(0) <= this.angle && this.angle <= degToRad(180)) {
+            if (degToRad(0) <= this.angle && this.angle <= degToRad(90)) {
+                shade = map(radToDeg(this.angle), 90, 0, 0, 0.5)
+            }
+            else if (degToRad(90) < this.angle && this.angle <= degToRad(180)) {
+                shade = map(radToDeg(this.angle), 90, 180, 0, 0.5)
+            }
+            color = new THREE.Color(Green)
+            otherColor = new THREE.Color(Blue)
         }
         else {
-            this.planeMaterial.color.lerp(Green,
-                this.angle % 1 + lodash.random(0.05, 0.1))
-            this.outlineMaterial.color.lerp(Green,
-                this.angle % 1 + lodash.random(0.05, 0.1))
+            if (degToRad(180) < this.angle && this.angle < degToRad(270)) {
+                shade = map(radToDeg(this.angle), 270, 180, 0, 0.5)
+            }
+            else if (degToRad(270) <= this.angle && this.angle <= degToRad(360)) {
+                shade = map(radToDeg(this.angle), 270, 360, 0, 0.5)
+            }
+            color = new THREE.Color(Blue)
+            otherColor = new THREE.Color(Green)
         }
+
+        this.planeMaterial.color = color
+        this.planeMaterial.color.lerp(new THREE.Color(otherColor), shade)
+        this.outlineMaterial.color = this.planeMaterial.color
     }
 
     static chooseOrbit() {
@@ -157,6 +171,7 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
+
 function isWebglAvailable() {
     // e.g.
     // renderer = isWebglAvailable() ?
@@ -171,6 +186,7 @@ function isWebglAvailable() {
         return false
     }
 }
+
 
 function init() {
     scene = new THREE.Scene()
@@ -198,6 +214,7 @@ function setup() {
     }
 }
 
+
 function update() {
     for (let rect of rects) {
         rect.rotate()
@@ -205,6 +222,7 @@ function update() {
         rect.recolor()
     }
 }
+
 
 function animate() {
     requestAnimationFrame(animate)

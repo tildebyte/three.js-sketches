@@ -41,14 +41,14 @@ window.requestAnimationFrame = requestAnimationFrame
 
 class Rect {
     constructor() {
-        this.size = Math.floor(randFloat(Width / 80, Width / 132))
+        this.size = randFloat(0.75, 1.5)
         this.position = Rect.positionOnOrbit()
         this.angle = this.getAngle()
         this.rotation = new THREE.Euler(0, 0, randFloat(0, TAU))
-        // ~0.2 to ~0.1 degree.
-        this.orbitAngularSpeed = avoidZero(3.49e-3, 1.745e-3)
-        // ~1.5 to ~0.3 degree.
-        this.objectAngularSpeed = avoidZero(2.618e-2, 5.236e-3)
+        // [-0.19, 0.19] within 0.03 degree of 0.
+        this.orbitAngularSpeed = avoidZero(0.19, 0.03)
+        // [-1.5, 1.5] within 0.3 degree of 0.
+        this.objectAngularSpeed = avoidZero(1.5, 0.3)
         this.planeGeometry = new THREE.PlaneGeometry(this.size, this.size)
         // Or WireframeGeometry(geo) to render all edges.
         this.outlineGeometry = new THREE.EdgesGeometry(this.planeGeometry)
@@ -83,7 +83,7 @@ class Rect {
     orbit() {
         let x = this.position.x,
             y = this.position.y,
-            theta = this.orbitAngularSpeed
+            theta = degToRad(this.orbitAngularSpeed)
         this.position.x = x * Math.cos(theta) + y * Math.sin(theta)
         this.position.y = y * Math.cos(theta) - x * Math.sin(theta)
         this.planeMesh.position.copy(this.position)
@@ -91,7 +91,7 @@ class Rect {
     }
 
     rotate() {
-        this.rotation.z += this.objectAngularSpeed
+        this.rotation.z += degToRad(this.objectAngularSpeed)
         this.planeMesh.rotation.z = this.rotation.z
     }
 
@@ -99,7 +99,8 @@ class Rect {
         // This looks weird because, AFAICT, lerping with a var of type `Color`
         //     **overwrites** the var with the new `Color` value (as well as
         //     changing the color being lerped, as expected). I'm working around
-        //     this by always creating entirely new `Color` vars each time.
+        //     this by always creating entirely new `Color` vars each time. Which
+        //     is probably overkill.
         let color,
             otherColor,
             shade
@@ -142,16 +143,16 @@ class Rect {
         let chance = Math.random(),
             orbit
         if (chance < 0.18) {
-            orbit = Width / 41
+            orbit = 3
         }
         else if (chance < 0.50) {
-            orbit = Width / 17
+            orbit = 6
         }
         else if (chance < 0.78) {
-            orbit = Width / 12
+            orbit = 9
         }
         else if (chance < 1.0) {
-            orbit = Width / 9
+            orbit = 12
         }
         return orbit
     }
@@ -163,7 +164,7 @@ class Rect {
             angle = randFloat(0, TAU),
             // Slightly offsets the position so we don't end up with the
             // visible rects orbiting on *exact* circles.
-            radius = Rect.chooseOrbit() + randFloat(0, Width / 64),
+            radius = Rect.chooseOrbit() + randFloat(0, 3),
             creationX = Math.cos(angle) * radius,
             creationY = Math.sin(angle) * radius
         position =  new THREE.Vector3(creationX, creationY, 0)
@@ -206,7 +207,8 @@ function init() {
         0.1,  // Near clip.
         10000  // Far clip.
     )
-    camera.position.z = 150
+    camera.position.z = 30
+    renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(Width, Height)
     renderer.setClearColor(Grey, 1.0)
     document.body.appendChild(renderer.domElement)

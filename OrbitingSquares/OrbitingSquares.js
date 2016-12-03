@@ -207,7 +207,7 @@ function init() {
         0.1,  // Near clip.
         10000  // Far clip.
     )
-    camera.position.z = 30
+    camera.position.z = 20
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(Width, Height)
     renderer.setClearColor(Grey, 1.0)

@@ -16,9 +16,9 @@
 const TAU = Math.PI * 2,
     Width = window.innerWidth,
     Height = window.innerHeight,
-    Grey = new THREE.Color(0x46474C),  // 0x585d6e
-    Blue = new THREE.Color(0x2525C4),  // 0x0000cc
-    Green = new THREE.Color(0x7DB528),  // 0x71bc00
+    Grey = new THREE.Color('rgb(70, 71, 76)'),
+    Blue = new THREE.Color('rgb(37, 37, 196)'),
+    Green = new THREE.Color('rgb(125, 181, 40)'),
     // ( x, a1, a2, b1, b2 ) - Linear mapping of x from range [a1, a2] to range [b1, b2].
     map = THREE.Math.mapLinear,
     degToRad = THREE.Math.degToRad,
